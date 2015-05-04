@@ -49,7 +49,7 @@ public class FXMLChatController implements Initializable {
         new Thread( () -> {
             try{
                 ServerSocket serverSocket = new ServerSocket(8001);
-                messagesTA.appendText("Server at" + new Date() + '\n');
+                messagesTA.appendText("Server at " + new Date() + '\n');
                 
                 while(true){
                     Socket socket = serverSocket.accept();
