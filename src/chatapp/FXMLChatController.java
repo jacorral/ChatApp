@@ -29,10 +29,6 @@ public class FXMLChatController implements Initializable {
     private int clientNo = 0;
     
     @FXML
-    private TextField nameTF;
-    @FXML
-    private TextField textTF;
-    @FXML
     public TextArea messagesTA;
     
    
