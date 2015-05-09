@@ -17,7 +17,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 /**
  *
@@ -45,12 +44,33 @@ public class FXMLChatController implements Initializable {
         new Thread( () -> {
             try{
                 ServerSocket serverSocket = new ServerSocket(8001);
-                messagesTA.appendText("Server at " + new Date() + '\n');
+                Platform.runLater(()->
+                messagesTA.appendText("Server at " + new Date() + '\n'));
+                Socket socket = serverSocket.accept();
+                
+                DataInputStream inputFromClient = new DataInputStream(socket.getInputStream());
+                DataOutputStream outputToClient = new DataOutputStream(socket.getOutputStream());
                 
                 while(true){
-                    Socket socket = serverSocket.accept();
+                   // Socket socket = serverSocket.accept();
+                    messagesTA.appendText(socket.toString() + " Client local port: " + 
+                            socket.getRemoteSocketAddress() + '\n');
+                   
+                    String name = inputFromClient.readUTF();
+                    String message = inputFromClient.readUTF();
+                    
+                    outputToClient.writeUTF("Name:  " + name);
+                    outputToClient.writeUTF("Says: " + message);
+                    
+                    //new Thread(new HandleAClient(socket)).start();
+                    Platform.runLater(()->{
+                        messagesTA.appendText("Name: " + name + '\n');
+                        messagesTA.appendText("Says: " + message + '\n');
+                    });
+                    
                     
                     clientNo++;
+                
                 }
                 
             }
@@ -62,6 +82,8 @@ public class FXMLChatController implements Initializable {
     }
        
 }
+
+/*
 
 class HandleAClient implements Runnable{
     private Socket socket;
@@ -88,11 +110,11 @@ class HandleAClient implements Runnable{
                     messagesTA.appendText(message);
                 });
                 
-                new Thread(new HandleAClient(socket)).start();
+               // new Thread(new HandleAClient(socket)).start();
             }
         }
         catch(IOException ex){
             ex.printStackTrace();
         }
     }
-}
+} */
