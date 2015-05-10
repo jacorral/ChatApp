@@ -53,6 +53,7 @@ public class FXMLChatController implements Initializable {
                 
                 while(true){
                    // Socket socket = serverSocket.accept();
+                    
                     messagesTA.appendText(socket.toString() + " Client local port: " + 
                             socket.getRemoteSocketAddress() + '\n');
                    
@@ -62,7 +63,8 @@ public class FXMLChatController implements Initializable {
                     outputToClient.writeUTF("Name:  " + name);
                     outputToClient.writeUTF("Says: " + message);
                     
-                    //new Thread(new HandleAClient(socket)).start();
+                    new HandleAClient(socket);
+                 
                     Platform.runLater(()->{
                         messagesTA.appendText("Name: " + name + '\n');
                         messagesTA.appendText("Says: " + message + '\n');
@@ -83,7 +85,7 @@ public class FXMLChatController implements Initializable {
        
 }
 
-/*
+
 
 class HandleAClient implements Runnable{
     private Socket socket;
@@ -117,4 +119,4 @@ class HandleAClient implements Runnable{
             ex.printStackTrace();
         }
     }
-} */
+} 
